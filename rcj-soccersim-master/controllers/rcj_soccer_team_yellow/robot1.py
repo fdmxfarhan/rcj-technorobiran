@@ -10,7 +10,9 @@ class MyRobot1(RCJSoccerRobot):
         self.heading = math.degrees(self.get_compass_heading())
         self.xr = pos[0]
         self.yr = pos[1]
-
+        if self.robot.getName()[0] == 'B':
+            self.xr *= -1
+            self.yr *= -1
         if self.is_new_ball_data():
             self.is_ball = True
             ball_data = self.get_new_ball_data()
