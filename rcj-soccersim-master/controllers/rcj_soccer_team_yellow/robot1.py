@@ -22,18 +22,26 @@ class MyRobot1(RCJSoccerRobot):
             self.yb =  math.cos(math.radians(self.ball_angle + self.heading)) * self.ball_distance + self.yr
         else:
             self.is_ball = False
+    def motor(self, vl, vr):
+        if vr > 10: vr = 10
+        if vr <-10: vr =-10
+        if vl > 10: vl = 10
+        if vl <-10: vl =-10
+        self.right_motor.setVelocity(vr)
+        self.left_motor.setVelocity(vl)
     def move(self, x, y):
         angle = math.degrees(math.atan2(self.xr - x, y - self.yr))
         dest_angle = self.heading - angle
-        if dest_angle > 5:
-            self.right_motor.setVelocity(10)
-            self.left_motor.setVelocity(-10)
-        elif dest_angle < -5:
-            self.right_motor.setVelocity(-10)
-            self.left_motor.setVelocity(10)
+        if dest_angle > 180: dest_angle -= 360
+        if dest_angle <-180: dest_angle += 360
+
+        
+        if dest_angle > -90 and dest_angle < 90:
+            self.motor(10 - dest_angle*0.4, 10 + dest_angle*0.4)
         else:
-            self.right_motor.setVelocity(10)
-            self.left_motor.setVelocity(10)
+            if dest_angle >= 0: dest_angle -= 180
+            else:               dest_angle += 180
+            self.motor(-10 - dest_angle*0.4, -10 + dest_angle*0.4)
     def stop(self):
         self.left_motor.setVelocity(0)
         self.right_motor.setVelocity(0)
@@ -55,8 +63,8 @@ class MyRobot1(RCJSoccerRobot):
             if self.xb != 0 and self.yb != 0.75:
                 m = (self.yb - 0.75) / self.xb
                 b = 0.75
-                self.yt = self.yb - 0.1
-                self.xt = (self.yb - 0.1 - b)/m
+                self.yt = self.yb - 0.05
+                self.xt = (self.yb - 0.05 - b)/m
 
             if self.is_ball:
                 if self.arrived_to_target:
@@ -68,6 +76,6 @@ class MyRobot1(RCJSoccerRobot):
                     if dist(self.xr, self.yr, self.xt, self.yt) < 0.01: 
                         self.arrived_to_target = True
             else:
-                self.move(0, 0)
+                self.stop()
            
             
