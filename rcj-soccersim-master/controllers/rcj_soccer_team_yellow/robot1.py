@@ -67,7 +67,12 @@ class MyRobot1(RCJSoccerRobot):
                 self.xt = (self.yb - 0.05 - b)/m
 
             if self.is_ball:
-                if self.arrived_to_target:
+                if self.yr > self.yb:
+                    if self.xr > self.xb:
+                        self.move(self.xb + 0.15, self.yb) 
+                    else:
+                        self.move(self.xb - 0.15, self.yb) 
+                elif self.arrived_to_target:
                     self.move(self.xb, self.yb)
                     if dist(self.xr, self.yr, self.xt, self.yt) > 0.2: 
                         self.arrived_to_target = False
