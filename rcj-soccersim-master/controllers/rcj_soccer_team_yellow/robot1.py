@@ -22,6 +22,12 @@ class MyRobot1(RCJSoccerRobot):
             self.yb =  math.cos(math.radians(self.ball_angle + self.heading)) * self.ball_distance + self.yr
         else:
             self.is_ball = False
+        ###################################### Find Behind Ball Spot
+        if self.xb != 0 and self.yb != 0.75:
+                m = (self.yb - 0.75) / self.xb
+                b = 0.75
+                self.yt = self.yb - 0.1
+                self.xt = (self.yb - 0.1 - b)/m
     def motor(self, vl, vr):
         if vr > 10: vr = 10
         if vr <-10: vr =-10
@@ -45,6 +51,29 @@ class MyRobot1(RCJSoccerRobot):
     def stop(self):
         self.left_motor.setVelocity(0)
         self.right_motor.setVelocity(0)
+    def ForwardAI(self):
+        if self.yr > self.yb:
+            if self.xr > self.xb:
+                self.move(self.xb + 0.15, self.yb) 
+            else:
+                self.move(self.xb - 0.15, self.yb) 
+        elif self.arrived_to_target:
+            self.move(self.xb, self.yb)
+            if dist(self.xr, self.yr, self.xt, self.yt) > 0.2: 
+                self.arrived_to_target = False
+        else:
+            self.move(self.xt, self.yt)
+            if dist(self.xr, self.yr, self.xt, self.yt) < 0.01: 
+                self.arrived_to_target = True
+    def Formation(self):
+        if self.robot.getName()[1] == '1':
+            self.move(0, -0.6)
+        if self.robot.getName()[1] == '2':
+            self.move(-0.3, -0.2)
+        if self.robot.getName()[1] == '3':
+            self.move(0.3, -0.2)
+    def GoalKeeperAI(self):
+        self.move(self.xb, -0.6)
     def run(self):
         self.xr = 0 
         self.yr = 0
@@ -59,28 +88,10 @@ class MyRobot1(RCJSoccerRobot):
         self.arrived_to_target = False
         while self.robot.step(TIME_STEP) != -1:
             self.readData()
-
-            if self.xb != 0 and self.yb != 0.75:
-                m = (self.yb - 0.75) / self.xb
-                b = 0.75
-                self.yt = self.yb - 0.05
-                self.xt = (self.yb - 0.05 - b)/m
-
             if self.is_ball:
-                if self.yr > self.yb:
-                    if self.xr > self.xb:
-                        self.move(self.xb + 0.15, self.yb) 
-                    else:
-                        self.move(self.xb - 0.15, self.yb) 
-                elif self.arrived_to_target:
-                    self.move(self.xb, self.yb)
-                    if dist(self.xr, self.yr, self.xt, self.yt) > 0.2: 
-                        self.arrived_to_target = False
-                else:
-                    self.move(self.xt, self.yt)
-                    if dist(self.xr, self.yr, self.xt, self.yt) < 0.01: 
-                        self.arrived_to_target = True
+                # self.ForwardAI()
+                self.GoalKeeperAI()
             else:
-                self.stop()
+                self.Formation()
            
             
