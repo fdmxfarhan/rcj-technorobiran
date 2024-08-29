@@ -97,7 +97,10 @@ class MyRobot1(RCJSoccerRobot):
         if self.robot.getName()[1] == '3':
             self.move(0.3, -0.2)
     def GoalKeeperAI(self):
-        self.move(clamp(self.xb, -0.3, 0.3), -0.7)
+        if self.ball_distance > 0.2:
+            self.move(clamp(self.xb, -0.3, 0.3), -0.7)
+        else:
+            self.move(self.xb, self.yb)
     def run(self):
         self.xr = 0 
         self.yr = 0
