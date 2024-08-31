@@ -9,6 +9,7 @@ def clamp(a, min_, max_):
     if a < min_: return min_
     if a > max_: return max_
     return a
+
 class MyRobot1(RCJSoccerRobot):
     def readData(self):
         pos = self.get_gps_coordinates()
@@ -40,7 +41,7 @@ class MyRobot1(RCJSoccerRobot):
             'yb': self.yb,
             'xr': self.xr,
             'yr': self.yr,
-            'id': self.robot.getName()[1]
+            'id': int(self.robot.getName()[1]) - 1
         })
         ###################################### Daryaft Data az team
         while self.is_new_team_data():
@@ -49,7 +50,29 @@ class MyRobot1(RCJSoccerRobot):
                 self.xb = team_data['xb']
                 self.yb = team_data['yb']
                 self.is_ball = True
-
+            self.robotposes[team_data['id']] = [
+                team_data['xr'], 
+                team_data['yr'], 
+                dist(team_data['xr'], team_data['yr'], self.xb, self.yb)
+            ]
+        self.robotposes[int(self.robot.getName()[1]) - 1] = [self.xr, self.yr, self.ball_distance]
+        ###################################### Peyda kardane doortarin robot
+        doortarin = self.robotposes[0][2]
+        doortarinID = 1
+        nazdiktarin = self.robotposes[0][2]
+        nazdiktarinID = 1
+        for i in range(3):
+            if self.robotposes[i][2] > doortarin:
+                doortarin = self.robotposes[i][2]
+                doortarinID = i + 1
+            if self.robotposes[i][2] < nazdiktarin:
+                nazdiktarin = self.robotposes[i][2]
+                nazdiktarinID = i + 1
+        ###################################### Moshakhas kardane naghshe robot
+        if int(self.robot.getName()[1]) == doortarinID:
+            self.role = 'GoalKeeper'
+        else:
+            self.role = 'Forward'
     def motor(self, vl, vr):
         if vr > 10: vr = 10
         if vr <-10: vr =-10
@@ -113,14 +136,22 @@ class MyRobot1(RCJSoccerRobot):
         self.yt = 0
         self.xt = 0
         self.arrived_to_target = False
+        self.robotposes = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ]
+        self.role = 'Forward'
         while self.robot.step(TIME_STEP) != -1:
             self.readData()
             
 
 
             if self.is_ball:
-                # self.ForwardAI()
-                self.GoalKeeperAI()
+                if self.role == 'Forward':
+                    self.ForwardAI()
+                elif self.role == 'GoalKeeper':
+                    self.GoalKeeperAI()
             else:
                 self.Formation()
            
