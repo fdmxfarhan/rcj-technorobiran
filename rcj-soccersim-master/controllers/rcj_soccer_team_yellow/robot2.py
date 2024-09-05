@@ -73,7 +73,49 @@ class MyRobot2(RCJSoccerRobot):
             self.role = 'GoalKeeper'
         else:
             self.role = 'Forward'
-
+        ###################################### Tashkhis Harekate toop va robot va penalty area time
+        step = 1
+        threshold = 0.05
+        if time.time() - self.start_time > step:
+            if dist(self.last_xb, self.last_yb, self.xb, self.yb) < threshold:
+                self.ball_stop_time += step
+            else:
+                self.ball_stop_time = 0
+            if dist(self.last_xr, self.last_yr, self.xr, self.yr) < threshold:
+                self.robot_stop_time += step
+            else:
+                self.robot_stop_time = 0
+            if self.xr > -0.35 and self.xr < 0.35 and self.yr < -0.59:
+                self.penalty_area_time += step
+            else:
+                self.penalty_area_time = 0
+            self.last_xb = self.xb
+            self.last_yb = self.yb
+            self.last_xr = self.xr
+            self.last_yr = self.yr
+            self.start_time = time.time()
+    def get_nearest_neutral_spot(self):
+        ALL_NEUTRAL_SPOTS = [
+            [0, 0],
+            [-0.3, -0.3],
+            [0, -0.2],
+            [0.3, -0.3],
+            [0.3, 0.3],
+            [0, 0.2],
+            [-0.3, 0.3],
+        ]
+        NEUTRAL_SPOTS = []
+        for i in range(len(ALL_NEUTRAL_SPOTS)):
+            for j in range(3):
+                if dist(self.robotposes[j][0], self.robotposes[j][1], ALL_NEUTRAL_SPOTS[i][0], ALL_NEUTRAL_SPOTS[i][1]) > 0.08:
+                    NEUTRAL_SPOTS.append(ALL_NEUTRAL_SPOTS[i])
+        min_dist = dist(self.xb, self.yb, NEUTRAL_SPOTS[0][0], NEUTRAL_SPOTS[0][1])
+        min_index = 0
+        for i in range(len(NEUTRAL_SPOTS)):
+            if dist(self.xb, self.yb, NEUTRAL_SPOTS[i][0], NEUTRAL_SPOTS[i][1]) < min_dist:
+                min_dist = dist(self.xb, self.yb, NEUTRAL_SPOTS[i][0], NEUTRAL_SPOTS[i][1])
+                min_index = i
+        return NEUTRAL_SPOTS[min_index]
     def motor(self, vl, vr):
         if vr > 10: vr = 10
         if vr <-10: vr =-10
@@ -143,11 +185,16 @@ class MyRobot2(RCJSoccerRobot):
             [0, 0, 0]
         ]
         self.role = 'Forward'
+        self.start_time = time.time()
+        self.last_xb = 0
+        self.last_yb = 0
+        self.last_xr = 0
+        self.last_yr = 0
+        self.ball_stop_time = 0
+        self.robot_stop_time = 0
+        self.penalty_area_time = 0
         while self.robot.step(TIME_STEP) != -1:
             self.readData()
-            
-
-
             if self.is_ball:
                 if self.role == 'Forward':
                     self.ForwardAI()
