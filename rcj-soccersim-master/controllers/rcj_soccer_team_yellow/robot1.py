@@ -73,9 +73,13 @@ class MyRobot1(RCJSoccerRobot):
             self.role = 'GoalKeeper'
         else:
             self.role = 'Forward'
+            if int(self.robot.getName()[1]) != nazdiktarinID:
+                self.is_defence_robot = True
+            else:
+                self.is_defence_robot = False
         ###################################### Tashkhis Harekate toop va robot va penalty area time
         step = 1
-        threshold = 0.05
+        threshold = 0.1
         if time.time() - self.start_time > step:
             if dist(self.last_xb, self.last_yb, self.xb, self.yb) < threshold:
                 self.ball_stop_time += step
@@ -96,13 +100,13 @@ class MyRobot1(RCJSoccerRobot):
             self.start_time = time.time()
     def get_nearest_neutral_spot(self):
         ALL_NEUTRAL_SPOTS = [
-            [0, 0],
-            [-0.3, -0.3],
-            [0, -0.2],
-            [0.3, -0.3],
-            [0.3, 0.3],
-            [0, 0.2],
-            [-0.3, 0.3],
+            [ 0   ,  0   ,  0    , -0.15],
+            [-0.3 , -0.3 , -0.38 , -0.42],
+            [ 0   , -0.2 ,  0    , -0.35],
+            [ 0.3 , -0.3 ,  0.38 , -0.42],
+            [ 0.3 ,  0.3 ,  0.36 ,  0.15],
+            [ 0   ,  0.2 ,  0    ,  0.5 ],
+            [-0.3 ,  0.3 , -0.36 ,  0.15],
         ]
         NEUTRAL_SPOTS = []
         for i in range(len(ALL_NEUTRAL_SPOTS)):
@@ -137,6 +141,24 @@ class MyRobot1(RCJSoccerRobot):
             if dest_angle >= 0: dest_angle -= 180
             else:               dest_angle += 180
             self.motor(-10 - dest_angle*0.4, -10 + dest_angle*0.4)
+    def moveAndLook(self, x, y, x1, y1):
+        angle = math.degrees(math.atan2(self.xr - x, y - self.yr))
+        dest_angle = self.heading - angle
+        if dest_angle > 180: dest_angle -= 360
+        if dest_angle <-180: dest_angle += 360
+
+        if dist(self.xr, self.yr, x, y) < 0.02:
+            angle = math.degrees(math.atan2(self.xr - x1, y1 - self.yr))
+            dest_angle = self.heading - angle
+            if dest_angle > 180: dest_angle -= 360
+            if dest_angle <-180: dest_angle += 360
+            self.motor(-dest_angle*0.4, dest_angle*0.4)
+        elif dest_angle > -90 and dest_angle < 90:
+            self.motor(10 - dest_angle*0.4, 10 + dest_angle*0.4)
+        else:
+            if dest_angle >= 0: dest_angle -= 180
+            else:               dest_angle += 180
+            self.motor(-10 - dest_angle*0.4, -10 + dest_angle*0.4)   
     def stop(self):
         self.left_motor.setVelocity(0)
         self.right_motor.setVelocity(0)
@@ -157,16 +179,22 @@ class MyRobot1(RCJSoccerRobot):
                 self.arrived_to_target = True
     def Formation(self):
         if self.robot.getName()[1] == '1':
-            self.move(0, -0.6)
+            self.moveAndLook(0, -0.6, 0, 0.75)
         if self.robot.getName()[1] == '2':
-            self.move(-0.3, -0.2)
+            self.moveAndLook(-0.3, -0.2, 0, 0.75)
         if self.robot.getName()[1] == '3':
-            self.move(0.3, -0.2)
+            self.moveAndLook(0.3, -0.2, 0, 0.75)
     def GoalKeeperAI(self):
         if self.ball_distance > 0.2:
             self.move(clamp(self.xb, -0.3, 0.3), -0.7)
         else:
             self.move(self.xb, self.yb)
+    def PenaltyAreaTimeout(self):
+        self.goalkeeper_running = True
+        self.move(self.xb, 0)
+        if(self.yr > -0.2):
+            self.goalkeeper_running = False
+        # self.ForwardAI()
     def run(self):
         self.xr = 0 
         self.yr = 0
@@ -193,13 +221,24 @@ class MyRobot1(RCJSoccerRobot):
         self.ball_stop_time = 0
         self.robot_stop_time = 0
         self.penalty_area_time = 0
+        self.goalkeeper_running = False
+        self.is_defence_robot = False
         while self.robot.step(TIME_STEP) != -1:
             self.readData()
             if self.is_ball:
                 if self.role == 'Forward':
-                    self.ForwardAI()
+                    if self.is_defence_robot:
+                        neutral_spot = self.get_nearest_neutral_spot()
+                        self.moveAndLook(neutral_spot[2], neutral_spot[3], 0, 0.75)
+                    else:
+                        self.ForwardAI()
                 elif self.role == 'GoalKeeper':
-                    self.GoalKeeperAI()
+                    if self.ball_stop_time > 3:
+                        self.moveAndLook(0, -0.3, 0, 0.75)
+                    elif self.penalty_area_time > 10 or self.goalkeeper_running:
+                        self.PenaltyAreaTimeout()
+                    else:
+                        self.GoalKeeperAI()
             else:
                 self.Formation()
            
