@@ -227,7 +227,7 @@ class MyRobot1(RCJSoccerRobot):
             self.readData()
             if self.is_ball:
                 if self.role == 'Forward':
-                    if self.is_defence_robot:
+                    if self.ball_stop_time > 3 and self.is_defence_robot:
                         neutral_spot = self.get_nearest_neutral_spot()
                         self.moveAndLook(neutral_spot[2], neutral_spot[3], 0, 0.75)
                     else:
