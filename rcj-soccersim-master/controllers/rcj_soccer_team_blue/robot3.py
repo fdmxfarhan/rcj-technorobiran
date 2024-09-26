@@ -52,19 +52,8 @@ class MyRobot3(RCJSoccerRobot):
         self.left_motor.setVelocity(0)
         self.right_motor.setVelocity(0)
     def ForwardAI(self):
-        if self.yr > self.yb:
-            if self.xr > self.xb:
-                self.move(self.xb + 0.15, self.yb) 
-            else:
-                self.move(self.xb - 0.15, self.yb) 
-        elif self.arrived_to_target:
-            self.move(self.xb, self.yb)
-            if dist(self.xr, self.yr, self.xt, self.yt) > 0.2: 
-                self.arrived_to_target = False
-        else:
-            self.move(self.xt, self.yt)
-            if dist(self.xr, self.yr, self.xt, self.yt) < 0.01: 
-                self.arrived_to_target = True
+        self.move(self.xb, self.yb)
+        
     def Formation(self):
         if self.robot.getName()[1] == '1':
             self.move(0, -0.6)
