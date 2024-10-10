@@ -241,5 +241,3 @@ class MyRobot1(RCJSoccerRobot):
                         self.GoalKeeperAI()
             else:
                 self.Formation()
-           
-            

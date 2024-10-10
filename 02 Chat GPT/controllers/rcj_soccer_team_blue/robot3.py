@@ -103,10 +103,10 @@ class MyRobot3(RCJSoccerRobot):
             [ 0   ,  0   ,  0    , -0.15],
             [-0.3 , -0.3 , -0.38 , -0.42],
             [ 0   , -0.2 ,  0    , -0.35],
-            [ 0.3 , -0.3 ,  0.22 , -0.42],
-            [ 0.3 ,  0.3 ,  0.45 ,  0.15],
+            [ 0.3 , -0.3 ,  0.38 , -0.42],
+            [ 0.3 ,  0.3 ,  0.36 ,  0.15],
             [ 0   ,  0.2 ,  0    ,  0.5 ],
-            [-0.3 ,  0.3 , -0.45 ,  0.15],
+            [-0.3 ,  0.3 , -0.36 ,  0.15],
         ]
         NEUTRAL_SPOTS = []
         for i in range(len(ALL_NEUTRAL_SPOTS)):
@@ -152,14 +152,13 @@ class MyRobot3(RCJSoccerRobot):
             dest_angle = self.heading - angle
             if dest_angle > 180: dest_angle -= 360
             if dest_angle <-180: dest_angle += 360
-            self.motor(dest_angle*0.4, dest_angle*0.4)
+            self.motor(-dest_angle*0.4, dest_angle*0.4)
         elif dest_angle > -90 and dest_angle < 90:
             self.motor(10 - dest_angle*0.4, 10 + dest_angle*0.4)
         else:
             if dest_angle >= 0: dest_angle -= 180
             else:               dest_angle += 180
-            self.motor(-10 - dest_angle*0.4, -10 + dest_angle*0.4)
-    
+            self.motor(-10 - dest_angle*0.4, -10 + dest_angle*0.4)   
     def stop(self):
         self.left_motor.setVelocity(0)
         self.right_motor.setVelocity(0)
@@ -180,11 +179,11 @@ class MyRobot3(RCJSoccerRobot):
                 self.arrived_to_target = True
     def Formation(self):
         if self.robot.getName()[1] == '1':
-            self.move(0, -0.6)
+            self.moveAndLook(0, -0.6, 0, 0.75)
         if self.robot.getName()[1] == '2':
-            self.move(-0.3, -0.2)
+            self.moveAndLook(-0.3, -0.2, 0, 0.75)
         if self.robot.getName()[1] == '3':
-            self.move(0.3, -0.2)
+            self.moveAndLook(0.3, -0.2, 0, 0.75)
     def GoalKeeperAI(self):
         if self.ball_distance > 0.2:
             self.move(clamp(self.xb, -0.3, 0.3), -0.7)
@@ -228,10 +227,9 @@ class MyRobot3(RCJSoccerRobot):
             self.readData()
             if self.is_ball:
                 if self.role == 'Forward':
-                    if self.is_defence_robot:
+                    if self.ball_stop_time > 3 and self.is_defence_robot:
                         neutral_spot = self.get_nearest_neutral_spot()
-                        print(neutral_spot)
-                        self.move(neutral_spot[2], neutral_spot[3])
+                        self.moveAndLook(neutral_spot[2], neutral_spot[3], 0, 0.75)
                     else:
                         self.ForwardAI()
                 elif self.role == 'GoalKeeper':
@@ -243,5 +241,3 @@ class MyRobot3(RCJSoccerRobot):
                         self.GoalKeeperAI()
             else:
                 self.Formation()
-           
-            
