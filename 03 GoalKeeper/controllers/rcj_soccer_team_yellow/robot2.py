@@ -164,20 +164,21 @@ class MyRobot2(RCJSoccerRobot):
         self.left_motor.setVelocity(0)
         self.right_motor.setVelocity(0)
     def ForwardAI(self):
-        if self.yr > self.yb:
-            if self.xr > self.xb:
-                self.move(self.xb + 0.15, self.yb) 
-            else:
-                self.move(self.xb - 0.15, self.yb) 
-        elif self.arrived_to_target:
-            # self.move(self.xb, self.yb)
-            self.move(0 , 0.75)
-            if dist(self.xr, self.yr, self.xb, self.yb) > 0.2: 
-                self.arrived_to_target = False
-        else:
-            self.move(self.xt, self.yt)
-            if dist(self.xr, self.yr, self.xt, self.yt) < 0.01: 
-                self.arrived_to_target = True
+        self.move(self.xb, self.yb)
+        # if self.yr > self.yb:
+        #     if self.xr > self.xb:
+        #         self.move(self.xb + 0.15, self.yb) 
+        #     else:
+        #         self.move(self.xb - 0.15, self.yb) 
+        # elif self.arrived_to_target:
+        #     # self.move(self.xb, self.yb)
+        #     self.move(0 , 0.75)
+        #     if dist(self.xr, self.yr, self.xb, self.yb) > 0.2: 
+        #         self.arrived_to_target = False
+        # else:
+        #     self.move(self.xt, self.yt)
+        #     if dist(self.xr, self.yr, self.xt, self.yt) < 0.01: 
+        #         self.arrived_to_target = True
     def Formation(self):
         if self.robot.getName()[1] == '1':
             self.move(0, -0.6)
@@ -226,14 +227,12 @@ class MyRobot2(RCJSoccerRobot):
         self.is_defence_robot = False
         while self.robot.step(TIME_STEP) != -1:
             self.readData()
-            # if self.is_ball:
-            #     if self.is_defence_robot:
-            #         neutral_spot = self.get_nearest_neutral_spot()
-            #         self.move(neutral_spot[2], neutral_spot[3])
-            #     else:
-            #         self.ForwardAI()
-                
-            # else:
-            #     self.Formation()
+            if self.is_ball:
+                if self.xb > 0.4 or self.xb < -0.4:
+                    self.move(0, self.yb)
+                else:
+                    self.ForwardAI()
+            else:
+                self.Formation()
            
             

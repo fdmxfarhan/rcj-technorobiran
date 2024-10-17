@@ -202,7 +202,6 @@ class MyRobot1(RCJSoccerRobot):
                     self.motor(-10, -10)
                 else:
                     self.motor(10, 10)
-
     def PenaltyAreaTimeout(self):
         self.goalkeeper_running = True
         self.move(self.xb, 0)
