@@ -185,7 +185,12 @@ class MyRobot1(RCJSoccerRobot):
         if self.robot.getName()[1] == '3':
             self.moveAndLook(0.3, -0.2, 0, 0.75)
     def GoalKeeperAI(self):
-        if self.yr > -0.5 or self.yr < -0.55:
+        if self.yb < -0.5 and (self.xb > 0.3 or self.yb < -0.3):
+            if self.xb > 0:
+                self.move(0.4, self.yb)
+            else:
+                self.move(-0.4, self.yb)
+        elif self.yr > -0.5 or self.yr < -0.55:
             self.move(clamp(self.xb, -0.4, 0.4), -0.55)
         else:
             if self.heading > 95: 

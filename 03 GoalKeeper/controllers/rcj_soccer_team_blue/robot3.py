@@ -75,9 +75,9 @@ class MyRobot3(RCJSoccerRobot):
         self.arrived_to_target = False
         while self.robot.step(TIME_STEP) != -1:
             self.readData()
-            if self.is_ball:
-                self.ForwardAI()
-            else:
-                self.Formation()
+            # if self.is_ball:
+            #     self.ForwardAI()
+            # else:
+            #     self.Formation()
            
             

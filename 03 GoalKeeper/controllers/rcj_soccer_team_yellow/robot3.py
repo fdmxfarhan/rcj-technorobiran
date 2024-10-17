@@ -226,14 +226,14 @@ class MyRobot3(RCJSoccerRobot):
         self.is_defence_robot = False
         while self.robot.step(TIME_STEP) != -1:
             self.readData()
-            if self.is_ball:
-                if self.is_defence_robot:
-                    neutral_spot = self.get_nearest_neutral_spot()
-                    self.move(neutral_spot[2], neutral_spot[3])
-                else:
-                    self.ForwardAI()
+            # if self.is_ball:
+            #     if self.is_defence_robot:
+            #         neutral_spot = self.get_nearest_neutral_spot()
+            #         self.move(neutral_spot[2], neutral_spot[3])
+            #     else:
+            #         self.ForwardAI()
                 
-            else:
-                self.Formation()
+            # else:
+            #     self.Formation()
            
             
