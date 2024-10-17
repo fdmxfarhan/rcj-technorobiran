@@ -136,11 +136,11 @@ class MyRobot2(RCJSoccerRobot):
         if dist(self.xr, self.yr, x, y) < 0.02 and not self.is_ball:
             self.stop()
         elif dest_angle > -90 and dest_angle < 90:
-            self.motor(10 - dest_angle*0.4, 10 + dest_angle*0.4)
+            self.motor(10 - dest_angle*0.2, 10 + dest_angle*0.2)
         else:
             if dest_angle >= 0: dest_angle -= 180
             else:               dest_angle += 180
-            self.motor(-10 - dest_angle*0.4, -10 + dest_angle*0.4)
+            self.motor(-10 - dest_angle*0.2, -10 + dest_angle*0.2)
     def moveAndLook(self, x, y, x1, y1):
         angle = math.degrees(math.atan2(self.xr - x, y - self.yr))
         dest_angle = self.heading - angle
@@ -164,7 +164,10 @@ class MyRobot2(RCJSoccerRobot):
         self.left_motor.setVelocity(0)
         self.right_motor.setVelocity(0)
     def ForwardAI(self):
-        self.move(self.xb, self.yb)
+        if self.yr > self.yb:
+            self.move(self.xb+0.1, self.yb)
+        else:
+            self.move(self.xb, self.yb)
         # if self.yr > self.yb:
         #     if self.xr > self.xb:
         #         self.move(self.xb + 0.15, self.yb) 
