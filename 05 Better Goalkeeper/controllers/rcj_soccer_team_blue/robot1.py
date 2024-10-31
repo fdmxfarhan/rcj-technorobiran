@@ -10,7 +10,7 @@ class MyRobot1(RCJSoccerRobot):
             else:
                 move(self, -0.4, self.yb)
         elif self.yr > -0.5 or self.yr < -0.55:
-            move(self, clamp(self.xb, -0.4, 0.4), -0.55)
+            move(self, clamp(self.goalkeeper_x, -0.4, 0.4), -0.55)
         else:
             if self.heading > 95: 
                 motor(self, -10, 10)

@@ -31,6 +31,7 @@ def define_variables(robot):
     robot.penalty_area_time = 0
     robot.goalkeeper_running = False
     robot.is_defence_robot = False
+    robot.goalkeeper_x = 0
 ############################ محاسبات
 def dist(x1, y1, x2, y2):
     return math.sqrt((y1 - y2)**2 + (x1 - x2)**2)
@@ -153,6 +154,14 @@ def readData(robot):
     step = 1
     threshold = 0.1
     if time.time() - robot.start_time > step:
+        if(robot.xb - robot.last_yb != 0) and robot.yb < robot.last_yb:
+            m = (robot.yb - robot.last_yb) / (robot.xb - robot.last_yb)
+            b = robot.yb - robot.xb * m
+            
+            if m != 0: robot.goalkeeper_x = (-0.55 - b)/m
+            else:      robot.goalkeeper_x = robot.xb
+        else: robot.goalkeeper_x = robot.xb
+
         if dist(robot.last_xb, robot.last_yb, robot.xb, robot.yb) < threshold:
             robot.ball_stop_time += step
         else:
