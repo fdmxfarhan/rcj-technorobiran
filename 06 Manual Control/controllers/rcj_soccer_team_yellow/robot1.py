@@ -25,9 +25,8 @@ class MyRobot1(RCJSoccerRobot):
         define_variables(self)
         while self.robot.step(TIME_STEP) != -1:
             readData(self)
+            print(self.sonar['front']/1000)
             if self.manual_control:
                 manualControl(self)
             else:
                 self.GoalKeeperAI()
-           
-            

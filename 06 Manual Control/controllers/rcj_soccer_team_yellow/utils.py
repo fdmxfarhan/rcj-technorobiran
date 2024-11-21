@@ -32,6 +32,7 @@ def define_variables(robot):
     robot.goalkeeper_running = False
     robot.is_defence_robot = False
     robot.manual_control = False
+    robot.sonar = 0
 ############################ محاسبات
 def dist(x1, y1, x2, y2):
     return math.sqrt((y1 - y2)**2 + (x1 - x2)**2)
@@ -192,6 +193,9 @@ def readData(robot):
                 robot.manual_control = False 
     if keyboard.is_pressed('4'):
         robot.manual_control = False
+    ######################################  خواندن سنسور فاصله
+    robot.sonar = robot.get_sonar_values()
+
 def get_nearest_neutral_spot(robot):
     ALL_NEUTRAL_SPOTS = [
         [ 0   ,  0   ,  0    , -0.15],
