@@ -21,15 +21,15 @@ class MyRobot2(RCJSoccerRobot):
         define_variables(self)
         while self.robot.step(TIME_STEP) != -1:
             readData(self)
-            if self.manual_control:
-                manualControl(self)
-            else:
-                if self.is_ball:
-                    if self.ball_stop_time > 3:
-                        LackOffProgress(self)
-                    else:
-                        self.ForwardAI()
-                else:
-                    Formation(self)
+            # if self.manual_control:
+            #     manualControl(self)
+            # else:
+            #     if self.is_ball:
+            #         if self.ball_stop_time > 3:
+            #             LackOffProgress(self)
+            #         else:
+            #             self.ForwardAI()
+            #     else:
+            #         Formation(self)
            
             

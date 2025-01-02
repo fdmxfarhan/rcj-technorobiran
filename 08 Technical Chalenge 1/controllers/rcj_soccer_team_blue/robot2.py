@@ -26,12 +26,12 @@ class MyRobot2(RCJSoccerRobot):
         define_variables(self)
         while self.robot.step(TIME_STEP) != -1:
             readData(self)
-            if self.is_ball:
-                if self.xb > 0.4 or self.xb < -0.4:
-                    move(self, 0, self.yb)
-                else:
-                    self.ForwardAI()
-            else:
-                Formation(self)
+            # if self.is_ball:
+            #     if self.xb > 0.4 or self.xb < -0.4:
+            #         move(self, 0, self.yb)
+            #     else:
+            #         self.ForwardAI()
+            # else:
+            #     Formation(self)
            
             

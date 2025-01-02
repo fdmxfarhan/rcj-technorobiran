@@ -29,24 +29,24 @@ BLUE_LEFT_NS = "blue_left_ns"
 BLUE_MIDDLE_NS = "blue_middle_ns"
 BLUE_RIGHT_NS = "blue_right_ns"
 NEUTRAL_SPOTS = {
-    CENTER_NS: (0, 0),
-    YELLOW_LEFT_NS: (-0.3, -0.3),
-    YELLOW_MIDDLE_NS: (0, -0.2),
-    YELLOW_RIGHT_NS: (0.3, -0.3),
-    BLUE_LEFT_NS: (0.3, 0.3),
-    BLUE_MIDDLE_NS: (0, 0.2),
-    BLUE_RIGHT_NS: (-0.3, 0.3),
+    CENTER_NS:        (0.5, 0.1),
+    YELLOW_LEFT_NS:   (0.5, 0.3),
+    YELLOW_MIDDLE_NS: (0.5, 0.5),
+    YELLOW_RIGHT_NS:  (0.5, -0.1),
+    BLUE_LEFT_NS:     (0.5, -0.3),
+    BLUE_MIDDLE_NS:   (0.5, -0.5),
+    BLUE_RIGHT_NS:    (0.5, 0),
 }
 
 OBJECT_DEPTH = 0.042
 
 ROBOT_INITIAL_TRANSLATION = {
-    "B1": [0.4, 0.1, OBJECT_DEPTH],
-    "B2": [0.4, 0.3, OBJECT_DEPTH],
-    "B3": [0.4, 0.5, OBJECT_DEPTH],
+    "B1": [0.5, 0.1, OBJECT_DEPTH],
+    "B2": [0.5, 0.3, OBJECT_DEPTH],
+    "B3": [0.5, 0.5, OBJECT_DEPTH],
     "Y1": [-0.3, -0.3, OBJECT_DEPTH],
-    "Y2": [0.3, -0.3, OBJECT_DEPTH],
-    "Y3": [0, -0.3, OBJECT_DEPTH],
+    "Y2": [0.5, -0.3, OBJECT_DEPTH],
+    "Y3": [0.5, -0.5, OBJECT_DEPTH],
 }
 
 ROBOT_INITIAL_ROTATION = {
@@ -58,8 +58,8 @@ ROBOT_INITIAL_ROTATION = {
     "Y3": [0, 0, 1, 1.57],
 }
 
-BLUE_KICKOFF_TRANSLATION = [0.4, 0.1, OBJECT_DEPTH]
-YELLOW_KICKOFF_TRANSLATION = [0.4, -0.1, OBJECT_DEPTH]
+BLUE_KICKOFF_TRANSLATION = [0.5, 0.5, OBJECT_DEPTH]
+YELLOW_KICKOFF_TRANSLATION = [0.5, -0.5, OBJECT_DEPTH]
 
 KICKOFF_TRANSLATION = {
     Team.BLUE.value: BLUE_KICKOFF_TRANSLATION,

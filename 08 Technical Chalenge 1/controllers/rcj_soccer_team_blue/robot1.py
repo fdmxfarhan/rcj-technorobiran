@@ -25,6 +25,6 @@ class MyRobot1(RCJSoccerRobot):
         define_variables(self)
         while self.robot.step(TIME_STEP) != -1:
             readData(self)
-            self.GoalKeeperAI()
+            # self.GoalKeeperAI()
            
             

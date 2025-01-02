@@ -2,6 +2,7 @@ import math, time
 # import keyboard
 
 OPONENT_GOAL_Y = 1.5
+TEAMATE_GOAL_Y = -1.5
 
 
 def define_variables(robot):
@@ -15,6 +16,8 @@ def define_variables(robot):
     robot.is_ball = False
     robot.yt = 0
     robot.xt = 0
+    robot.yt2 = 0
+    robot.xt2 = 0
     robot.arrived_to_target = False
     robot.robotposes = [
         [0, 0, 0],
@@ -118,10 +121,16 @@ def readData(robot):
         robot.is_ball = False
     ###################################### Find Behind Ball Spot
     if robot.xb != 0 and robot.yb != OPONENT_GOAL_Y:
-            m = (robot.yb - OPONENT_GOAL_Y) / robot.xb
-            b = OPONENT_GOAL_Y
-            robot.yt = robot.yb - 0.1
-            robot.xt = (robot.yb - 0.1 - b)/m
+        m = (robot.yb - OPONENT_GOAL_Y) / robot.xb
+        b = OPONENT_GOAL_Y
+        robot.yt = robot.yb - 0.2
+        robot.xt = (robot.yb - 0.2 - b)/m
+    if robot.xb != 0 and robot.yb != TEAMATE_GOAL_Y:
+        m = (robot.yb - TEAMATE_GOAL_Y) / robot.xb
+        b = TEAMATE_GOAL_Y
+        robot.yt2 =  robot.yb + 0.2
+        robot.xt2 = (robot.yb + 0.2 - b)/m
+    
     ###################################### Ersal Data be team
     robot.send_data_to_team({
         'is_ball': robot.is_ball,
