@@ -1,7 +1,7 @@
 import math, time
 # import keyboard
 
-OPONENT_GOAL_Y = 1.5
+OPONENT_GOAL_Y = 0.75
 
 
 def define_variables(robot):

@@ -161,7 +161,10 @@ class RCJSoccerReferee:
 
     def reset_ball_position(self):
         """Reset the position of the ball."""
-        self.sv.set_ball_position(BALL_INITIAL_TRANSLATION)
+        self.sv.set_ball_position([
+            random.randint(-50,50)/100.0, 
+            random.randint(-50,40)/100.0, 
+            0])
         self.ball_stop = 2
         self.reset_checkers("ball")
 

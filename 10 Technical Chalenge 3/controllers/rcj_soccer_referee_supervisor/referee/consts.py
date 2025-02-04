@@ -1,6 +1,6 @@
 from referee.enums import Team
-
-DEFAULT_MATCH_TIME = 10 * 60  # 10 minutes
+import random
+DEFAULT_MATCH_TIME = 10*60  # 10 minutes
 
 GOAL_YELLOW_Y_LIMIT = -0.745
 GOAL_BLUE_Y_LIMIT = 0.745
@@ -19,7 +19,7 @@ ROBOT_NAMES = ["B1", "B2", "B3", "Y1", "Y2", "Y3"]
 N_ROBOTS = len(ROBOT_NAMES)
 
 BALL_DEPTH = 0
-BALL_INITIAL_TRANSLATION = [0.3, -0.4, BALL_DEPTH]
+BALL_INITIAL_TRANSLATION = [random.randint(-50,50)/100.0, random.randint(-50,40)/100.0, BALL_DEPTH]
 
 CENTER_NS = "center_ns"
 YELLOW_LEFT_NS = "yellow_left_ns"
@@ -44,9 +44,9 @@ ROBOT_INITIAL_TRANSLATION = {
     "B1": [0.5, 0.65, OBJECT_DEPTH],
     "B2": [0.5, 0.6, OBJECT_DEPTH],
     "B3": [0.5, 0.55, OBJECT_DEPTH],
+    "Y1": [-0, -0.4, OBJECT_DEPTH],
     "Y2": [0.4, 0.65, OBJECT_DEPTH],
     "Y3": [0.55, 0.65, OBJECT_DEPTH],
-    "Y1": [-0, -0.4, OBJECT_DEPTH],
 }
 
 ROBOT_INITIAL_ROTATION = {
