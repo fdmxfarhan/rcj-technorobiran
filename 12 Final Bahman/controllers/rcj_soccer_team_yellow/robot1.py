@@ -17,6 +17,8 @@ class MyRobot1(RCJSoccerRobot):
             elif self.heading < 85:
                 motor(self, 10, -10)
             else:
+                if not self.is_ball: self.xb = 0
+                
                 if clamp(self.xb, -0.4, 0.4) > self.xr:
                     motor(self, -10, -10)
                 else:
